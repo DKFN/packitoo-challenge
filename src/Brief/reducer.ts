@@ -1,5 +1,5 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {appendBrief} from "./actions";
+import {appendBrief, setBriefs} from "./actions";
 import {IBrief} from "./models";
 
 const initialState = {
@@ -9,5 +9,8 @@ const initialState = {
 export const briefReducer = createReducer(initialState, {
     [appendBrief.type]: (state, action) => {
         state.briefs.push(action.payload)
+    },
+    [setBriefs.type]: (state, action) => {
+        state.briefs = action.payload;
     }
 });
