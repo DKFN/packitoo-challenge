@@ -33,9 +33,11 @@ export const ListBrief: FC = () => {
 
     return <table>
         <thead>
-            <th>Title</th>
-            <th>Comment</th>
-            <th>Name</th>
+            <tr>
+                <th>Title</th>
+                <th>Comment</th>
+                <th>Product name</th>
+            </tr>
         </thead>
         <tbody>
         {
