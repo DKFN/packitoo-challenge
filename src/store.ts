@@ -1,16 +1,17 @@
 import {configureStore} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
-import {briefReducer} from "./Brief/briefReducer";
+import {productReducer} from "./Products/reducer";
+import {IProduct} from "./Products/models";
 
 export interface IAppState {
-    brief: {
-        briefs: [],
+    product: {
+        products: IProduct[],
     }
 }
 
 export const store = configureStore({
     reducer: {
-        brief: briefReducer
+        product: productReducer
     }
 });
 
