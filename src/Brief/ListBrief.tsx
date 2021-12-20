@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 import {IAppState, useAppDispatch} from "../store";
 import {IBrief} from "./models";
 import {fetchBriefs} from "./actions";
+import {ProductSelect} from "../Products/ProductSelect";
 
 const ListBriefRow: FC<IBrief> = ({productId, title, comment}: IBrief) => {
     // I should have key indexed the products to have a O(1) here instead of O(n)
@@ -21,7 +22,17 @@ const ListBriefRow: FC<IBrief> = ({productId, title, comment}: IBrief) => {
 export const ListBrief: FC = () => {
     const dispatch = useAppDispatch();
     const briefs = useSelector((app: IAppState) => app.brief.briefs);
-    console.log("Fetched briefs", briefs);
+    const [selectedProductId, setSelectedProductId] = React.useState<undefined | number>(undefined);
+    const [displayedBriefs, setDisplayedBriefs] = React.useState<IBrief[]>([]);
+
+    useEffect(() => {
+        if (selectedProductId === undefined)
+            setDisplayedBriefs(briefs);
+        else
+            setDisplayedBriefs(
+                briefs.filter((b) => b.productId === selectedProductId)
+            );
+    }, [selectedProductId, briefs]);
 
     useEffect(() => {
         dispatch(fetchBriefs());
@@ -31,7 +42,9 @@ export const ListBrief: FC = () => {
         /* eslint-disable react-hooks/exhaustive-deps */
     }, [])
 
-    return <table>
+    return<>
+        <ProductSelect onChangecb={setSelectedProductId} />
+        <table>
         <thead>
             <tr>
                 <th>Title</th>
@@ -41,8 +54,9 @@ export const ListBrief: FC = () => {
         </thead>
         <tbody>
         {
-            briefs.map((b: IBrief) => <ListBriefRow {...b} key={b.id}/>)
+            displayedBriefs.map((b: IBrief) => <ListBriefRow {...b} key={b.id}/>)
         }
         </tbody>
-    </table>;
+    </table>
+        </>
 }
