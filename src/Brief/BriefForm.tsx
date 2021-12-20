@@ -5,6 +5,7 @@ import {fetchProductctData} from "../Products/actions";
 import {CircularProgress} from "@mui/material";
 import {useFormik} from "formik";
 import {IProduct} from "../Products/models";
+import {createBrief} from "./actions";
 
 export const BriefForm: FC = () => {
     const dispatch = useAppDispatch();
@@ -14,20 +15,23 @@ export const BriefForm: FC = () => {
         initialValues: {
             title: '',
             comment: '',
-            productId: ""
+            productId: ''
         },
         onSubmit: (values) => {
-            console.log("Values: ", values);
+            setIsLoading(true);
+            const newValues = {
+                ...values,
+                productId: parseInt(values.productId, 10)
+            }
+            dispatch(createBrief(newValues))
+                .finally(() => setIsLoading(false))
         }
     });
 
-    console.log("State products ", products);
-
     useEffect(() => {
         setIsLoading(true);
-        console.log("Component did mount")
         dispatch(fetchProductctData())
-            .then(() => setIsLoading(false));
+            .finally(() => setIsLoading(false));
         // I intentionnally don't provide any deps because I want this function to be called ONLY once on mounting
         /* eslint-disable react-hooks/exhaustive-deps */
     }, []);
